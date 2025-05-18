@@ -36,6 +36,8 @@ const translations = {
     noResults: "No challenges found",
   },
   de: {
+    movement: "Bewegung",
+    music: "Musik",
     title: "Familienaktivitäten",
     subtitle: "Entdecke lustige Aktivitäten für dich und deine Kinder",
     searchPlaceholder: "Aktivitäten suchen...",
