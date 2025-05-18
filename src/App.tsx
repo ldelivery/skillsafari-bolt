@@ -343,7 +343,7 @@ function App() {
                                 key={category}
                                 className={`text-xs px-2 py-1 rounded-full ${getCategoryColor(category)}`}
                               >
-{translations[language]?.[category.toLowerCase()] ?? category}
+                                {translations[language]?.[category.toLowerCase()] ?? category}
 
                               </span>
                             ))}
