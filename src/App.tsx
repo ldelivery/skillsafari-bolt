@@ -31,6 +31,7 @@ const translations = {
     benefits: "Benefits",
     steps: "Steps",
     ages: "Ages",
+    noResults: "No challenges found",
   },
   de: {
     title: "Familienaktivitäten",
@@ -52,6 +53,7 @@ const translations = {
     benefits: "Vorteile",
     steps: "Schritte",
     ages: "Alter",
+    noResults: "Keine Aktivitäten gefunden",
   }
 };
 
@@ -61,6 +63,8 @@ function App() {
   const [language, setCurrentLanguage] = useState<'en' | 'de'>('en');
   const [activeChallenge, setActiveChallenge] = useState<any>(null);
   const [savedChallenges, setSavedChallenges] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const z = useZero();
   
@@ -157,6 +161,13 @@ function App() {
     }
   };
 
+  const filteredChallenges = challengesData?.filter(challenge => {
+    const matchesSearch = challenge.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         challenge.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || challenge.categories.includes(selectedCategory);
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4 sm:p-8">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -168,7 +179,12 @@ function App() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
             <div className="relative flex-grow sm:flex-grow-0">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder={translations[language].searchPlaceholder} className="pl-8 w-full" />
+              <Input 
+                placeholder={translations[language].searchPlaceholder} 
+                className="pl-8 w-full"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
             <Select value={language} onValueChange={handleLanguageChange}>
               <SelectTrigger className="w-[120px]">
@@ -268,7 +284,12 @@ function App() {
             </CardContent>
           </Card>
         ) : (
-          <Tabs defaultValue="all" className="space-y-6">
+          <Tabs 
+            defaultValue="all" 
+            className="space-y-6"
+            value={selectedCategory}
+            onValueChange={setSelectedCategory}
+          >
             <TabsList className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <TabsTrigger value="all">{translations[language].allActivities}</TabsTrigger>
               <TabsTrigger value="creative">{translations[language].creative}</TabsTrigger>
@@ -276,50 +297,56 @@ function App() {
               <TabsTrigger value="physical">{translations[language].physical}</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="all" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {challengesData?.map((challenge) => {
-                  const IconComponent = getIconComponent(challenge.categories[0]);
-                  return (
-                    <Card key={challenge.id} className="hover:shadow-lg transition-shadow">
-                      <CardHeader>
-                        <div className="flex items-center gap-2">
-                          <div className="p-2 bg-primary/10 rounded-full">
-                            <IconComponent className="h-5 w-5 text-primary" />
+            <TabsContent value={selectedCategory} className="space-y-4">
+              {filteredChallenges?.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  {translations[language].noResults}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredChallenges?.map((challenge) => {
+                    const IconComponent = getIconComponent(challenge.categories[0]);
+                    return (
+                      <Card key={challenge.id} className="hover:shadow-lg transition-shadow">
+                        <CardHeader>
+                          <div className="flex items-center gap-2">
+                            <div className="p-2 bg-primary/10 rounded-full">
+                              <IconComponent className="h-5 w-5 text-primary" />
+                            </div>
+                            <div className="flex gap-2">
+                              <span className="text-xs bg-secondary px-2 py-1 rounded-full">
+                                {challenge.time_estimate_minutes} mins
+                              </span>
+                              <span className="text-xs bg-secondary px-2 py-1 rounded-full">
+                                {translations[language].ages} {challenge.age_groups.join(", ")}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex gap-2">
-                            <span className="text-xs bg-secondary px-2 py-1 rounded-full">
-                              {challenge.time_estimate_minutes} mins
-                            </span>
-                            <span className="text-xs bg-secondary px-2 py-1 rounded-full">
-                              {translations[language].ages} {challenge.age_groups.join(", ")}
-                            </span>
-                          </div>
-                        </div>
-                        <CardTitle className="mt-4">{challenge.title}</CardTitle>
-                        <CardDescription>{challenge.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-2">
-                        <Button
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => setSelectedChallenge(challenge)}
-                        >
-                          {translations[language].viewDetails}
-                        </Button>
-                        <Button 
-                          variant="secondary" 
-                          className="w-full"
-                          onClick={() => handleToggleSavedChallenge(challenge.id)}
-                        >
-                          <Heart className={`mr-2 h-4 w-4 ${savedChallenges.includes(challenge.id) ? 'fill-current' : ''}`} />
-                          {translations[language].saveChallenge}
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
+                          <CardTitle className="mt-4">{challenge.title}</CardTitle>
+                          <CardDescription>{challenge.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <Button
+                            variant="outline"
+                            className="w-full"
+                            onClick={() => setSelectedChallenge(challenge)}
+                          >
+                            {translations[language].viewDetails}
+                          </Button>
+                          <Button 
+                            variant="secondary" 
+                            className="w-full"
+                            onClick={() => handleToggleSavedChallenge(challenge.id)}
+                          >
+                            <Heart className={`mr-2 h-4 w-4 ${savedChallenges.includes(challenge.id) ? 'fill-current' : ''}`} />
+                            {translations[language].saveChallenge}
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         )}
