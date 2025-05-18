@@ -161,6 +161,19 @@ function App() {
     }
   };
 
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'creative':
+        return 'bg-pink-100 text-pink-800';
+      case 'educational':
+        return 'bg-blue-100 text-blue-800';
+      case 'physical':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   const filteredChallenges = challengesData?.filter(challenge => {
     const matchesSearch = challenge.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          challenge.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -313,7 +326,7 @@ function App() {
                             <div className="p-2 bg-primary/10 rounded-full">
                               <IconComponent className="h-5 w-5 text-primary" />
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-2">
                               <span className="text-xs bg-secondary px-2 py-1 rounded-full">
                                 {challenge.time_estimate_minutes} mins
                               </span>
@@ -321,6 +334,16 @@ function App() {
                                 {translations[language].ages} {challenge.age_groups.join(", ")}
                               </span>
                             </div>
+                          </div>
+                          <div className="flex flex-wrap gap-2 mt-3">
+                            {challenge.categories.map((category: string) => (
+                              <span
+                                key={category}
+                                className={`text-xs px-2 py-1 rounded-full ${getCategoryColor(category)}`}
+                              >
+                                {translations[language][category.toLowerCase()]}
+                              </span>
+                            ))}
                           </div>
                           <CardTitle className="mt-4">{challenge.title}</CardTitle>
                           <CardDescription>{challenge.description}</CardDescription>
@@ -375,6 +398,15 @@ function App() {
                   <Users className="h-4 w-4" />
                   <span>{translations[language].ages} {selectedChallenge.age_groups.join(", ")}</span>
                 </div>
+                {selectedChallenge.categories.map((category: string) => (
+                  <span
+                    key={category}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-full ${getCategoryColor(category)}`}
+                  >
+                    {React.createElement(getIconComponent(category), { className: "h-4 w-4" })}
+                    {translations[language][category.toLowerCase()]}
+                  </span>
+                ))}
               </div>
 
               <div className="space-y-6">
