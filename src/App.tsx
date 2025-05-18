@@ -64,9 +64,9 @@ function App() {
   const z = useZero();
   
   // Queries
-  const [settings] = [];
-  const [activeChallengeData] = [];
-  const [savedChallengesData] = [];
+  const [settings] = useQuery(z.query.settings);
+  const [activeChallengeData] = useQuery(z.query.activeChallenge);
+  const [savedChallengesData] = useQuery(z.query.savedChallenges);
   const [challengesData] = useQuery(z.query.challenges);
 
   useEffect(() => {
@@ -102,6 +102,7 @@ function App() {
 
   const handleStartChallenge = async (challenge: any) => {
     await startChallengeAction(challenge);
+    setSelectedChallenge(null);
   };
 
   const handleEndChallenge = async () => {
@@ -194,7 +195,7 @@ function App() {
                     {React.createElement(getIconComponent(activeChallenge.category), { className: "h-6 w-6 text-primary" })}
                   </div>
                   <div>
-                    <CardTitle>{activeChallenge.title[language]}</CardTitle>
+                    <CardTitle>{activeChallenge.title}</CardTitle>
                     <CardDescription>{translations[language].challengeInProgress}</CardDescription>
                   </div>
                 </div>
@@ -214,7 +215,7 @@ function App() {
 
               <div className="space-y-4">
                 <h3 className="font-semibold">{translations[language].materialsNeeded}:</h3>
-                {activeChallenge.materials[language].map((material: string, index: number) => (
+                {activeChallenge.materials.map((material: any, index: number) => (
                   <div
                     key={index}
                     className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
@@ -232,7 +233,7 @@ function App() {
                       }`}
                     />
                     <span className={activeChallenge.completedMaterials[index] ? 'line-through' : ''}>
-                      {material}
+                      {material.name}
                     </span>
                   </div>
                 ))}
@@ -240,7 +241,7 @@ function App() {
 
               <div className="space-y-4">
                 <h3 className="font-semibold">{translations[language].progress}:</h3>
-                {activeChallenge.steps[language].map((step: string, index: number) => (
+                {activeChallenge.steps.map((step: any, index: number) => (
                   <div
                     key={index}
                     className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
@@ -258,7 +259,7 @@ function App() {
                       }`}
                     />
                     <span className={activeChallenge.completedSteps[index] ? 'line-through' : ''}>
-                      {step}
+                      {step.title}
                     </span>
                   </div>
                 ))}
@@ -277,7 +278,7 @@ function App() {
             <TabsContent value="all" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {challengesData?.map((challenge) => {
-                  const IconComponent = getIconComponent(challenge.category);
+                  const IconComponent = getIconComponent(challenge.categories[0]);
                   return (
                     <Card key={challenge.id} className="hover:shadow-lg transition-shadow">
                       <CardHeader>
@@ -330,7 +331,7 @@ function App() {
               <DialogHeader>
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-primary/10 rounded-full">
-                    {React.createElement(getIconComponent(selectedChallenge.category), { className: "h-6 w-6 text-primary" })}
+                    {React.createElement(getIconComponent(selectedChallenge.categories[0]), { className: "h-6 w-6 text-primary" })}
                   </div>
                   <DialogTitle className="text-2xl">{selectedChallenge.title}</DialogTitle>
                 </div>
