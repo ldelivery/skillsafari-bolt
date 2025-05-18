@@ -35,11 +35,12 @@ export type ActiveChallenge = Challenge & {
   completedMaterials: boolean[];
 };
 
-// Initialize Zero with environment variables
+// Initialize Zero with explicit configuration
 export const zero = new Zero<Schema>({
   userID: 'default-user',
-  auth: () => import.meta.env.ZERO_AUTH_SECRET,
-  server: "https://skillsafari-zero-cache.fly.dev",
+  auth: import.meta.env.ZERO_AUTH_SECRET,
+  serverURL: "https://skillsafari-zero-cache.fly.dev",
+  schemaVersion: "1",
   schema,
   kvStore: "idb",
 });

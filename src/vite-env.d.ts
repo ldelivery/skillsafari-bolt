@@ -1,8 +1,9 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
+  readonly VITE_APP_TITLE: string
   readonly ZERO_AUTH_SECRET: string
-  readonly ZERO_REPLICA_FILE: string
+  // Add other env variables here
 }
 
 interface ImportMeta {
