@@ -68,7 +68,7 @@ function App() {
   const [settings] = [];
   const [activeChallengeData] = [];
   const [savedChallengesData] =  [];
-  const [challengesData] = useQuery(z.query.challenges);
+  const [challengesData] = useQuery(z.query.challenges.where("language_code", language));
 
   useEffect(() => {
     if (settings?.[0]?.language) {
@@ -98,7 +98,7 @@ function App() {
 
   const handleLanguageChange = async (value: 'en' | 'de') => {
     setCurrentLanguage(value);
-    await setLanguage(value);
+    // await setLanguage(value);
   };
 
   const handleStartChallenge = async (challenge: any) => {
@@ -260,7 +260,7 @@ function App() {
                       }`}
                     />
                     <span className={activeChallenge.completedSteps[index] ? 'line-through' : ''}>
-                      {step.title}
+                      {step.description}
                     </span>
                   </div>
                 ))}
@@ -364,7 +364,7 @@ function App() {
                   <h3 className="font-semibold mb-2">{translations[language].steps}:</h3>
                   <ol className="list-decimal list-inside space-y-2">
                     {selectedChallenge.steps.map((step: any, index: number) => (
-                      <li key={index}>{step.title}</li>
+                      <li key={index}>{step.description}</li>
                     ))}
                   </ol>
                 </div>

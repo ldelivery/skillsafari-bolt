@@ -13,29 +13,29 @@ import {
   PermissionsConfig,
 } from "@rocicorp/zero";
 
-const settings = table("settings")
-  .columns({
-    id: string(),
-    language: string(),
-  })
-  .primaryKey("id");
+// const settings = table("settings")
+//   .columns({
+//     id: string(),
+//     language: string(),
+//   })
+//   .primaryKey("id");
 
-const activeChallenge = table("active_challenges")
-  .columns({
-    id: string(),
-    //challenge: string(), // JSON stringified challenge
-    //startTime: number(),
-    //completed_steps: json(), // boolean[]
-    //completed_materials: json(), // boolean[]
-  })
-  .primaryKey("id");
+// const activeChallenge = table("active_challenges")
+//   .columns({
+//     id: string(),
+//     //challenge: string(), // JSON stringified challenge
+//     //startTime: number(),
+//     //completed_steps: json(), // boolean[]
+//     //completed_materials: json(), // boolean[]
+//   })
+//   .primaryKey("id");
 
-const savedChallenges = table("saved_challenges")
-  .columns({
-    id: string(),
-    //savedAt: number(),
-  })
-  .primaryKey("id");
+// const savedChallenges = table("saved_challenges")
+//   .columns({
+//     id: string(),
+//     //savedAt: number(),
+//   })
+//   .primaryKey("id");
 
 const challenges = table("challenges")
   .columns({
@@ -58,9 +58,9 @@ const challenges = table("challenges")
 
 export const schema = createSchema({
   tables: [
-    settings,
-    activeChallenge,
-    savedChallenges,
+    // settings,
+    // activeChallenge,
+    // savedChallenges,
     challenges
   ],
   relationships: [],
@@ -75,30 +75,30 @@ type AuthData = {
 
 export const permissions = definePermissions<AuthData, Schema>(schema, () => {
   return {
-    settings: {
-      row: {
-        select: ANYONE_CAN,
-        insert: ANYONE_CAN,
-        update: ANYONE_CAN,
-        delete: ANYONE_CAN,
-      },
-    },
-    activeChallenge: {
-      row: {
-        select: ANYONE_CAN,
-        insert: ANYONE_CAN,
-        update: ANYONE_CAN,
-        delete: ANYONE_CAN,
-      },
-    },
-    savedChallenges: {
-      row: {
-        select: ANYONE_CAN,
-        insert: ANYONE_CAN,
-        update: ANYONE_CAN,
-        delete: ANYONE_CAN,
-      },
-    },
+    // settings: {
+    //   row: {
+    //     select: ANYONE_CAN,
+    //     insert: ANYONE_CAN,
+    //     update: ANYONE_CAN,
+    //     delete: ANYONE_CAN,
+    //   },
+    // },
+    // activeChallenge: {
+    //   row: {
+    //     select: ANYONE_CAN,
+    //     insert: ANYONE_CAN,
+    //     update: ANYONE_CAN,
+    //     delete: ANYONE_CAN,
+    //   },
+    // },
+    // savedChallenges: {
+    //   row: {
+    //     select: ANYONE_CAN,
+    //     insert: ANYONE_CAN,
+    //     update: ANYONE_CAN,
+    //     delete: ANYONE_CAN,
+    //   },
+    // },
     challenges: {
       row: {
         select: ANYONE_CAN,
