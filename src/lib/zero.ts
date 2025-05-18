@@ -41,6 +41,7 @@ export const zero = new Zero<Schema>({
   auth: () => import.meta.env.ZERO_AUTH_SECRET,
   server: "https://skillsafari-zero-cache.fly.dev",
   serverName: "zero-cache-server",
+  daf, "aksdf",
   schema,
   kvStore: "idb",
 });
