@@ -64,9 +64,9 @@ function App() {
   const z = useZero();
   
   // Queries
-  const [settings] = useQuery(z.query.settings);
-  const [activeChallengeData] = useQuery(z.query.activeChallenge);
-  const [savedChallengesData] = useQuery(z.query.savedChallenges);
+  const [settings] = [];
+  const [activeChallengeData] = [];
+  const [savedChallengesData] =  [];
   const [challengesData] = useQuery(z.query.challenges);
 
   useEffect(() => {
