@@ -74,6 +74,8 @@ function App() {
   const [savedChallengesData] =  [];
   const [challengesData] = useQuery(z.query.challenges.where("language_code", language));
 
+  console.log("challengesData", challengesData)
+
   useEffect(() => {
     if (settings?.[0]?.language) {
       setCurrentLanguage(settings[0].language as 'en' | 'de');
