@@ -12,7 +12,7 @@ import { useQuery, useZero } from "@rocicorp/zero/react";
 
 const translations = {
   en: {
-    movement & music: "Movement & Music"
+    'movement & music': "Movement & Music"
     title: "Family Challenges",
     subtitle: "Discover fun activities to do with your children",
     searchPlaceholder: "Search challenges...",
