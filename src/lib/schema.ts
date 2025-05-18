@@ -1,11 +1,16 @@
 import {
   createSchema,
+  definePermissions,
+  ExpressionBuilder,
+  Row,
+  ANYONE_CAN,
   table,
   string,
   boolean,
   number,
   json,
   relationships,
+  PermissionsConfig,
 } from "@rocicorp/zero";
 
 const settings = table("settings")
@@ -18,12 +23,17 @@ const settings = table("settings")
 const activeChallenge = table("active_challenges")
   .columns({
     id: string(),
+    //challenge: string(), // JSON stringified challenge
+    //startTime: number(),
+    //completed_steps: json(), // boolean[]
+    //completed_materials: json(), // boolean[]
   })
   .primaryKey("id");
 
 const savedChallenges = table("saved_challenges")
   .columns({
     id: string(),
+    //savedAt: number(),
   })
   .primaryKey("id");
 
@@ -57,3 +67,42 @@ export const schema = createSchema({
 });
 
 export type Schema = typeof schema;
+
+// The contents of your decoded JWT.
+type AuthData = {
+  sub: string | null;
+};
+
+export const permissions = definePermissions<AuthData, Schema>(schema, () => {
+  return {
+    settings: {
+      row: {
+        select: ANYONE_CAN,
+        insert: ANYONE_CAN,
+        update: ANYONE_CAN,
+        delete: ANYONE_CAN,
+      },
+    },
+    activeChallenge: {
+      row: {
+        select: ANYONE_CAN,
+        insert: ANYONE_CAN,
+        update: ANYONE_CAN,
+        delete: ANYONE_CAN,
+      },
+    },
+    savedChallenges: {
+      row: {
+        select: ANYONE_CAN,
+        insert: ANYONE_CAN,
+        update: ANYONE_CAN,
+        delete: ANYONE_CAN,
+      },
+    },
+    challenges: {
+      row: {
+        select: ANYONE_CAN,
+      },
+    },
+  } satisfies PermissionsConfig<AuthData, Schema>;
+});
